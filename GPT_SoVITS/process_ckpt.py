@@ -1,4 +1,8 @@
 import traceback
+import sys
+sys.path.append('/content/GPT-SoVITS')
+sys.path.append('/content/GPT-SoVITS/tools')
+sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 from collections import OrderedDict
 
 import torch
