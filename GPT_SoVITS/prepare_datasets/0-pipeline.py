@@ -1,4 +1,8 @@
 import os, torch, sys
+import sys
+sys.path.append('/content/GPT-SoVITS')
+sys.path.append('/content/GPT-SoVITS/tools')
+sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 from subprocess import Popen
 
 now_dir = os.getcwd()

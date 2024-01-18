@@ -1,3 +1,4 @@
+torch
 numpy
 scipy
 tensorboard
@@ -8,15 +9,10 @@ gradio==3.14.0
 ffmpeg-python
 onnxruntime
 tqdm
-funasr
 cn2an
 pypinyin
 pyopenjtalk
 g2p_en
-torchaudio
-modelscope
-sentencepiece
-transformers
 chardet
-PyYAML
-i18n
+huggingface-hub==0.20.0rc1
+einops

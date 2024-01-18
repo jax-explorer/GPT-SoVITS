@@ -1,5 +1,9 @@
 import json,yaml,warnings,torch
 import platform
+import sys
+sys.path.append('/content/GPT-SoVITS')
+sys.path.append('/content/GPT-SoVITS/tools')
+sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 
 warnings.filterwarnings("ignore")
 torch.manual_seed(233333)
@@ -14,8 +18,8 @@ for path in site.getsitepackages():
     if("site-packages"in path):site_packages_root=path
 os.environ["OPENBLAS_NUM_THREADS"] = "4"
 os.environ["no_proxy"] = "localhost, 127.0.0.1, ::1"
-with open("%s/users.pth"%(site_packages_root),"w")as f:
-    f.write("%s\n%s/tools\n%s/tools/damo_asr\n%s/GPT_SoVITS\n%s/tools/uvr5"%(now_dir,now_dir,now_dir,now_dir,now_dir))
+# with open("%s/users.pth"%(site_packages_root),"w")as f:
+#     f.write("%s\n%s/tools\n%s/tools/damo_asr\n%s/GPT_SoVITS\n%s/tools/uvr5"%(now_dir,now_dir,now_dir,now_dir,now_dir))
 import traceback
 sys.path.append(now_dir)
 import shutil
@@ -725,5 +729,6 @@ with gr.Blocks(title="GPT-SoVITS WebUI") as app:
         server_name="0.0.0.0",
         inbrowser=True,
         server_port=webui_port_main,
+        share=True,
         quiet=True,
     )

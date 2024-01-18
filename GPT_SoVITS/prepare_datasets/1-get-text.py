@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-
+import sys
+sys.path.append('/content/GPT-SoVITS')
+sys.path.append('/content/GPT-SoVITS/tools')
+sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 inp_text = os.environ.get("inp_text")
 inp_wav_dir = os.environ.get("inp_wav_dir")
 exp_name = os.environ.get("exp_name")

@@ -488,5 +488,6 @@ if __name__ == "__main__":
         server_name="0.0.0.0",
         inbrowser=True,
         quiet=True,
+        share=True,
         server_port=int(args.webui_port_subfix)
     )

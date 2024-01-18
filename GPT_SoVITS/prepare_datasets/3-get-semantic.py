@@ -1,5 +1,8 @@
 import os
-
+import sys
+sys.path.append('/content/GPT-SoVITS')
+sys.path.append('/content/GPT-SoVITS/tools')
+sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 inp_text = os.environ.get("inp_text")
 exp_name = os.environ.get("exp_name")
 i_part = os.environ.get("i_part")
