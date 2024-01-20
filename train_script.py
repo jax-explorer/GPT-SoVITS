@@ -4,6 +4,7 @@ from config import python_exec,infer_device,is_half,exp_root,webui_port_main,web
 import os
 import traceback
 import torch
+import json
 
 
 def train_prepare(inp_text,inp_wav_dir,exp_name,gpu_numbers1a,gpu_numbers1Ba,gpu_numbers1c,bert_pretrained_dir,ssl_pretrained_dir,pretrained_s2G_path):
@@ -173,6 +174,94 @@ gpus = "-".join([i[0] for i in gpu_infos])
 
 current_working_directory = os.getcwd()
 
+
+
+
+
+p_train_SoVITS=None
+def open1Ba(batch_size,total_epoch,exp_name,text_low_lr_rate,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers1Ba,pretrained_s2G,pretrained_s2D):
+    global p_train_SoVITS
+    if(p_train_SoVITS==None):
+        with open("GPT_SoVITS/configs/s2.json")as f:
+            data=f.read()
+            data=json.loads(data)
+        s2_dir="%s/%s"%(exp_root,exp_name)
+        os.makedirs("%s/logs_s2"%(s2_dir),exist_ok=True)
+        data["train"]["batch_size"]=batch_size
+        data["train"]["epochs"]=total_epoch
+        data["train"]["text_low_lr_rate"]=text_low_lr_rate
+        data["train"]["pretrained_s2G"]=pretrained_s2G
+        data["train"]["pretrained_s2D"]=pretrained_s2D
+        data["train"]["if_save_latest"]=if_save_latest
+        data["train"]["if_save_every_weights"]=if_save_every_weights
+        data["train"]["save_every_epoch"]=save_every_epoch
+        data["train"]["gpu_numbers"]=gpu_numbers1Ba
+        data["data"]["exp_dir"]=data["s2_ckpt_dir"]=s2_dir
+        data["save_weight_dir"]=SoVITS_weight_root
+        data["name"]=exp_name
+        tmp_config_path="TEMP/tmp_s2.json"
+        with open(tmp_config_path,"w")as f:f.write(json.dumps(data))
+
+        cmd = '"%s" GPT_SoVITS/s2_train.py --config "%s"'%(python_exec,tmp_config_path)
+        yield "SoVITS训练开始：%s"%cmd,{"__type__":"update","visible":False},{"__type__":"update","visible":True}
+        print(cmd)
+        p_train_SoVITS = Popen(cmd, shell=True)
+        p_train_SoVITS.wait()
+        p_train_SoVITS=None
+        yield "SoVITS训练完成",{"__type__":"update","visible":True},{"__type__":"update","visible":False}
+    else:
+        yield "已有正在进行的SoVITS训练任务，需先终止才能开启下一次任务",{"__type__":"update","visible":False},{"__type__":"update","visible":True}
+
+
+
+def train_SoVITS(batch_size,total_epoch,exp_name,text_low_lr_rate,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers1Ba,pretrained_s2G,pretrained_s2D):
+    open1BaGenerator = open1Ba(batch_size,total_epoch,exp_name,text_low_lr_rate,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers1Ba,pretrained_s2G,pretrained_s2D)
+    for value in open1BaGenerator:
+        print(value)
+
+
+p_train_GPT=None
+def open1Bb(batch_size,total_epoch,exp_name,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1):
+    global p_train_GPT
+    if(p_train_GPT==None):
+        with open("GPT_SoVITS/configs/s1longer.yaml")as f:
+            data=f.read()
+            data=yaml.load(data, Loader=yaml.FullLoader)
+        s1_dir="%s/%s"%(exp_root,exp_name)
+        os.makedirs("%s/logs_s1"%(s1_dir),exist_ok=True)
+        data["train"]["batch_size"]=batch_size
+        data["train"]["epochs"]=total_epoch
+        data["pretrained_s1"]=pretrained_s1
+        data["train"]["save_every_n_epoch"]=save_every_epoch
+        data["train"]["if_save_every_weights"]=if_save_every_weights
+        data["train"]["if_save_latest"]=if_save_latest
+        data["train"]["half_weights_save_dir"]=GPT_weight_root
+        data["train"]["exp_name"]=exp_name
+        data["train_semantic_path"]="%s/6-name2semantic.tsv"%s1_dir
+        data["train_phoneme_path"]="%s/2-name2text.txt"%s1_dir
+        data["output_dir"]="%s/logs_s1"%s1_dir
+
+        os.environ["_CUDA_VISIBLE_DEVICES"]=gpu_numbers.replace("-",",")
+        os.environ["hz"]="25hz"
+        tmp_config_path="TEMP/tmp_s1.yaml"
+        with open(tmp_config_path, "w") as f:f.write(yaml.dump(data, default_flow_style=False))
+        # cmd = '"%s" GPT_SoVITS/s1_train.py --config_file "%s" --train_semantic_path "%s/6-name2semantic.tsv" --train_phoneme_path "%s/2-name2text.txt" --output_dir "%s/logs_s1"'%(python_exec,tmp_config_path,s1_dir,s1_dir,s1_dir)
+        cmd = '"%s" GPT_SoVITS/s1_train.py --config_file "%s" '%(python_exec,tmp_config_path)
+        yield "GPT训练开始：%s"%cmd,{"__type__":"update","visible":False},{"__type__":"update","visible":True}
+        print(cmd)
+        p_train_GPT = Popen(cmd, shell=True)
+        p_train_GPT.wait()
+        p_train_GPT=None
+        yield "GPT训练完成",{"__type__":"update","visible":True},{"__type__":"update","visible":False}
+    else:
+        yield "已有正在进行的GPT训练任务，需先终止才能开启下一次任务",{"__type__":"update","visible":False},{"__type__":"update","visible":True}
+
+
+def train_GPT(batch_size,total_epoch,exp_name,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1):
+    open1BbGenerator = open1Bb(batch_size,total_epoch,exp_name,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1)
+    for value in open1BbGenerator:
+        print(value)
+
 inp_text = current_working_directory + "/" + "data/list/a.list"
 inp_wav_dir = current_working_directory + "/" + "data/list/"
 exp_name = "jax_clone_voice"
@@ -184,3 +273,36 @@ pretrained_s2G_path = "GPT_SoVITS/pretrained_models/s2G488k.pth"
 
 train_prepare(inp_text=inp_text, inp_wav_dir=inp_wav_dir, exp_name=exp_name, gpu_numbers1a=gpu_numbers, gpu_numbers1Ba=gpu_numbers, gpu_numbers1c=gpu_numbers,
               bert_pretrained_dir=bert_pretrained_dir, ssl_pretrained_dir=ssl_pretrained_dir, pretrained_s2G_path=pretrained_s2G_path )
+
+
+batch_size = default_batch_size
+total_epoch = 8
+text_low_lr_rate = 0.4
+if_save_latest = True
+if_save_every_weights = True
+save_every_epoch = 4
+gpu_numbers1Ba = "%s" % (gpus)
+pretrained_s2D = "GPT_SoVITS/pretrained_models/s2D488k.pth"
+pretrained_s2G = "GPT_SoVITS/pretrained_models/s2G488k.pth"
+
+train_SoVITS(batch_size=batch_size, total_epoch=total_epoch, exp_name=exp_name, 
+             text_low_lr_rate=text_low_lr_rate, if_save_latest=if_save_latest, 
+             if_save_every_weights=if_save_every_weights, save_every_epoch=save_every_epoch,
+               gpu_numbers1Ba=gpu_numbers1Ba, pretrained_s2D=pretrained_s2D, pretrained_s2G=pretrained_s2G)
+
+
+
+gpt_batch_size = default_batch_size
+gpt_total_epoch = 15
+gpt_if_save_latest = True
+gpt_if_save_every_weights = True
+gpt_save_every_epoch = 5
+gpu_numbers1Bb = "%s" % (gpus)
+pretrained_s1 = "GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt"
+
+
+
+train_GPT(batch_size=gpt_batch_size, total_epoch=gpt_total_epoch, exp_name=exp_name, if_save_latest=gpt_if_save_latest,
+          if_save_every_weights=gpt_if_save_every_weights, save_every_epoch=gpt_save_every_epoch, 
+          gpu_numbers=gpu_numbers1Bb, pretrained_s1=pretrained_s1
+           )
