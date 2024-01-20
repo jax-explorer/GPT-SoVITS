@@ -5,6 +5,7 @@ import os
 import traceback
 import torch
 import json
+import yaml
 
 
 def train_prepare(inp_text,inp_wav_dir,exp_name,gpu_numbers1a,gpu_numbers1Ba,gpu_numbers1c,bert_pretrained_dir,ssl_pretrained_dir,pretrained_s2G_path):
@@ -174,7 +175,10 @@ gpus = "-".join([i[0] for i in gpu_infos])
 
 current_working_directory = os.getcwd()
 
-
+SoVITS_weight_root="SoVITS_weights"
+GPT_weight_root="GPT_weights"
+os.makedirs(SoVITS_weight_root,exist_ok=True)
+os.makedirs(GPT_weight_root,exist_ok=True)
 
 
 
