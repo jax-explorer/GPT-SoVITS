@@ -43,7 +43,7 @@ SoVITS_weight_root="SoVITS_weights"
 GPT_weight_root="GPT_weights"
 exp_name = "jax_clone_voice"
 gpt_path = GPT_weight_root + "/" + exp_name + "-e15.ckpt"
-sovits_path = SoVITS_weight_root + "/" + exp_name + "_" + "_e8_s128.pth"
+sovits_path = SoVITS_weight_root + "/" + exp_name + "_e8_s120.pth"
 
 # bert_model=bert_model.to(device)
 def get_bert_feature(text, word2ph):
