@@ -9,17 +9,15 @@ sys.path.append('/content/GPT-SoVITS/tools')
 sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 
 gpt_path = os.environ.get(
-    "gpt_path", "pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt"
+    "gpt_path", "GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt"
 )
-sovits_path = os.environ.get("sovits_path", "pretrained_models/s2G488k.pth")
+sovits_path = os.environ.get("sovits_path", "GPT_SoVITS/pretrained_models/s2G488k.pth")
 cnhubert_base_path = os.environ.get(
-    "cnhubert_base_path", "pretrained_models/chinese-hubert-base"
+    "cnhubert_base_path", "GPT_SoVITS/pretrained_models/chinese-hubert-base"
 )
 bert_path = os.environ.get(
-    "bert_path", "pretrained_models/chinese-roberta-wwm-ext-large"
+    "bert_path", "GPT_SoVITS/pretrained_models/chinese-roberta-wwm-ext-large"
 )
-infer_ttswebui = os.environ.get("infer_ttswebui", 9872)
-infer_ttswebui = int(infer_ttswebui)
 if "_CUDA_VISIBLE_DEVICES" in os.environ:
     os.environ["CUDA_VISIBLE_DEVICES"] = os.environ["_CUDA_VISIBLE_DEVICES"]
 is_half = eval(os.environ.get("is_half", "True"))
@@ -255,7 +253,9 @@ def create_wav_file(file_path, audio_data, sampling_rate):
 def interence(ref_wav_path, prompt_text, prompt_language, text, text_language):
     getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language)
     for simple_rate, audio_data in getTTSWavGenerator:
-        file_path = "data/output_list/1.wav"
+        wav_output_dir = "data/output_list"
+        file_path = wav_output_dir + "/1.wav"
+        os.makedirs(wav_output_dir, exist_ok=True)
         create_wav_file(file_path=file_path, audio_data=audio_data, sampling_rate=simple_rate)
 
 current_working_directory = os.getcwd()
