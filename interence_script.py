@@ -3,6 +3,7 @@ import json
 from pydub import AudioSegment
 import pysrt
 import sys
+import wave
 sys.path.append('/content/GPT-SoVITS')
 sys.path.append('/content/GPT-SoVITS/tools')
 sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
@@ -239,6 +240,24 @@ def get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language)
         np.int16
     )
 
+def create_wav_file(file_path, audio_data, sampling_rate):
+    # 打开WAV文件
+    with wave.open(file_path, 'w') as wav_file:
+        # 设置WAV文件的参数
+        wav_file.setnchannels(1)  # 单声道
+        wav_file.setsampwidth(2)  # 16位
+        wav_file.setframerate(sampling_rate)
+        wav_file.setnframes(len(audio_data))
+
+        # 将音频数据写入WAV文件
+        wav_file.writeframes(np.array(audio_data, dtype=np.int16).tobytes())
+
+def interence(ref_wav_path, prompt_text, prompt_language, text, text_language):
+    getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language)
+    for simple_rate, audio_data in getTTSWavGenerator:
+        file_path = "data/output_list/1.wav"
+        create_wav_file(file_path=file_path, audio_data=audio_data, sampling_rate=simple_rate)
+
 current_working_directory = os.getcwd()
 inp_wav_dir = current_working_directory + "/" + "data/list"
 
@@ -258,4 +277,4 @@ prompt_language = "中文"
 text = english_text
 text_language = "英文"
 
-get_tts_wav(ref_wav_path=ref_wav_path, prompt_text=prompt_text, prompt_language=prompt_language, text=text, text_language=text_language)
+interence(ref_wav_path=ref_wav_path, prompt_text=prompt_text, prompt_language=prompt_language, text=text, text_language=text_language)
