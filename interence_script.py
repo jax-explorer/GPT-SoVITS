@@ -8,10 +8,6 @@ sys.path.append('/content/GPT-SoVITS')
 sys.path.append('/content/GPT-SoVITS/tools')
 sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 
-gpt_path = os.environ.get(
-    "gpt_path", "GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt"
-)
-sovits_path = os.environ.get("sovits_path", "GPT_SoVITS/pretrained_models/s2G488k.pth")
 cnhubert_base_path = os.environ.get(
     "cnhubert_base_path", "GPT_SoVITS/pretrained_models/chinese-hubert-base"
 )
@@ -43,6 +39,11 @@ if is_half == True:
 else:
     bert_model = bert_model.to(device)
 
+SoVITS_weight_root="SoVITS_weights"
+GPT_weight_root="GPT_weights"
+exp_name = "jax_clone_voice"
+gpt_path = GPT_weight_root + "/" + exp_name + "-e15.ckpt"
+sovits_path = SoVITS_weight_root + "/" + exp_name + "_" + "_e8_s128.pth"
 
 # bert_model=bert_model.to(device)
 def get_bert_feature(text, word2ph):
@@ -276,10 +277,6 @@ prompt_language = "中文"
 
 text = english_text
 text_language = "英文"
-SoVITS_weight_root="SoVITS_weights"
-GPT_weight_root="GPT_weights"
-exp_name = "jax_clone_voice"
-gpt_path = GPT_weight_root + "/" + exp_name + "-e15.ckpt"
-sovits_path = SoVITS_weight_root + "/" + exp_name + "_" + "_e8_s128.pth"
+
 
 interence(ref_wav_path=ref_wav_path, prompt_text=prompt_text, prompt_language=prompt_language, text=text, text_language=text_language)
