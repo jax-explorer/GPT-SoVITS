@@ -179,7 +179,8 @@ SoVITS_weight_root="SoVITS_weights"
 GPT_weight_root="GPT_weights"
 os.makedirs(SoVITS_weight_root,exist_ok=True)
 os.makedirs(GPT_weight_root,exist_ok=True)
-
+tmp = os.path.join(current_working_directory, "TEMP")
+os.makedirs(tmp, exist_ok=True)
 
 
 p_train_SoVITS=None
@@ -267,7 +268,7 @@ def train_GPT(batch_size,total_epoch,exp_name,if_save_latest,if_save_every_weigh
         print(value)
 
 inp_text = current_working_directory + "/" + "data/list/a.list"
-inp_wav_dir = current_working_directory + "/" + "data/list/"
+inp_wav_dir = current_working_directory + "/" + "data/list"
 exp_name = "jax_clone_voice"
 gpu_numbers="%s-%s"%(gpus,gpus)
 
