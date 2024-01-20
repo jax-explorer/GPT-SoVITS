@@ -16,3 +16,7 @@ g2p_en
 chardet
 huggingface-hub==0.20.0rc1
 einops
+pydub
+pysrt
+google-cloud-storage
+ffmpeg

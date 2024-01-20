@@ -171,8 +171,10 @@ else:
     default_batch_size = 1
 gpus = "-".join([i[0] for i in gpu_infos])
 
-inp_text = "/content/data/list/a.list"
-inp_wav_dir = "/content/data/list/"
+current_working_directory = os.getcwd()
+
+inp_text = current_working_directory + "/" + "data/list/a.list"
+inp_wav_dir = current_working_directory + "/" + "data/list/"
 exp_name = "jax_clone_voice"
 gpu_numbers="%s-%s"%(gpus,gpus)
 
