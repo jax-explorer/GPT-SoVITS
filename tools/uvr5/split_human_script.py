@@ -27,10 +27,9 @@ device=infer_device
 is_half=True
 
 
-def uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format0):
+def uvr(model_name, paths, save_root_vocal, save_root_ins, agg, format0):
     infos = []
     try:
-        inp_root = inp_root.strip(" ").strip('"').strip("\n").strip('"').strip(" ")
         save_root_vocal = (
             save_root_vocal.strip(" ").strip('"').strip("\n").strip('"').strip(" ")
         )
@@ -50,12 +49,8 @@ def uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format
                 is_half=is_half,
             )
         is_hp3 = "HP3" in model_name
-        if inp_root != "":
-            paths = [os.path.join(inp_root, name) for name in os.listdir(inp_root)]
-        else:
-            paths = [path.name for path in paths]
         for path in paths:
-            inp_path = os.path.join(inp_root, path)
+            inp_path = path
             need_reformat = 1
             done = 0
             try:
@@ -134,7 +129,7 @@ paths = [current_working_directory + "/" + "data/ready.wav"]
 save_root_ins = current_working_directory + "/" + "data_handle"
 agg = 10
 formate0 = "wav"
-split_human_audio(model_name=model_name, inp_root=inp_root, 
+split_human_audio(model_name=model_name,
                   save_root_vocal=save_root_vocal, paths=paths, save_root_ins=save_root_ins, agg=agg, format0=formate0)
 
 
