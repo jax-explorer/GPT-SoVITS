@@ -251,32 +251,33 @@ def create_wav_file(file_path, audio_data, sampling_rate):
         # 将音频数据写入WAV文件
         wav_file.writeframes(np.array(audio_data, dtype=np.int16).tobytes())
 
-def interence(ref_wav_path, prompt_text, prompt_language, text, text_language):
-    getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language)
-    for simple_rate, audio_data in getTTSWavGenerator:
-        wav_output_dir = "data/output_list"
-        file_path = wav_output_dir + "/1.wav"
-        os.makedirs(wav_output_dir, exist_ok=True)
-        create_wav_file(file_path=file_path, audio_data=audio_data, sampling_rate=simple_rate)
+def interence(srt_content, audio_list_dir):
+    subs = pysrt.from_string(srt_content)
+    for i, sub in enumerate(subs):
+        wav_name = (i+1) + ".wav"
+        ref_wav_path = audio_list_dir + "/" + wav_name
+        chinese_text = sub.text.split('\n')[1]
+        english_text = sub.text.split('\n')[0]
+        prompt_text = chinese_text
+        prompt_language = "中文"
+        text = english_text
+        text_language = "英文"
+        getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language)
+        for simple_rate, audio_data in getTTSWavGenerator:
+            wav_output_dir = "data/output_list"
+            file_path = wav_output_dir + "/" + wav_name
+            os.makedirs(wav_output_dir, exist_ok=True)
+            create_wav_file(file_path=file_path, audio_data=audio_data, sampling_rate=simple_rate)
+
 
 current_working_directory = os.getcwd()
 inp_wav_dir = current_working_directory + "/" + "data/list"
 
-ref_wav_path=inp_wav_dir + "/1.wav"
+
 srt_path = "data/subtitle.srt"
 with open(srt_path, 'r') as file:
       data_dict = json.load(file)
 srt_content = data_dict['srt_content']
-subs = pysrt.from_string(srt_content)
-sub = subs[0]
-chinese_text = sub.text.split('\n')[1]
-english_text = sub.text.split('\n')[0]
-
-prompt_text = chinese_text
-prompt_language = "中文"
-
-text = english_text
-text_language = "英文"
 
 
-interence(ref_wav_path=ref_wav_path, prompt_text=prompt_text, prompt_language=prompt_language, text=text, text_language=text_language)
+interence(srt_content=srt_content, audio_list_dir=inp_wav_dir)
