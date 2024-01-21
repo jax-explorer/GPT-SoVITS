@@ -1,4 +1,8 @@
 import os
+import sys
+sys.path.append('/content/GPT-SoVITS')
+sys.path.append('/content/GPT-SoVITS/tools')
+sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
 import traceback,gradio as gr
 import logging
 from tools.i18n.i18n import I18nAuto
@@ -10,6 +14,8 @@ import torch
 import sys
 from mdxnet import MDXNetDereverb
 from vr import AudioPre, AudioPreDeEcho
+from config import python_exec,infer_device,is_half,exp_root,webui_port_main,webui_port_infer_tts,webui_port_uvr5,webui_port_subfix
+
 
 weight_uvr5_root = "tools/uvr5/uvr5_weights"
 uvr5_names = []
@@ -17,8 +23,8 @@ for name in os.listdir(weight_uvr5_root):
     if name.endswith(".pth") or "onnx" in name:
         uvr5_names.append(name.replace(".pth", ""))
 
-device=sys.argv[1]
-is_half=sys.argv[2]
+device=infer_device
+is_half=True
 
 
 def uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format0):
