@@ -30,11 +30,11 @@ def merge_audio_with_srt(audio_list_dir, srt_content):
         duration = end_time - start_time
 
         # Append silence if the audio segment is shorter than the subtitle duration
-        if len(audio_segment) > duration:
-            audio_segment = audio_segment.speedup(playback_speed=len(audio_segment) / duration)
-        else:
-            audio_segment = audio_segment.speeddown(playback_speed=duration / len(audio_segment))
-        combined_audio += audio_segment
+        # if len(audio_segment) > duration:
+        #     audio_segment = audio_segment.speedup(playback_speed=len(audio_segment) / duration)
+        # else:
+        #     audio_segment = audio_segment.speeddown(playback_speed=duration / len(audio_segment))
+        # combined_audio += audio_segment
 
         # Append the audio segment to the combined audio
         combined_audio += audio_segment

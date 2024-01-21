@@ -116,7 +116,7 @@ def uvr(model_name, paths, save_root_vocal, save_root_ins, agg, format0):
     yield "\n".join(infos)
 
 def split_human_audio(model_name, paths, save_root_vocal, save_root_ins, agg, format0):
-    uvrGenerator = uvr(model_name, paths, save_root_vocal, paths, save_root_ins, agg, format0)
+    uvrGenerator = uvr(model_name, paths, save_root_vocal, save_root_ins, agg, format0)
     for value in uvrGenerator:
         print(value)
 
