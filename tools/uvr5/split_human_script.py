@@ -115,8 +115,8 @@ def uvr(model_name, paths, save_root_vocal, save_root_ins, agg, format0):
             logger.info("Executed torch.cuda.empty_cache()")
     yield "\n".join(infos)
 
-def split_human_audio(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format0):
-    uvrGenerator = uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format0)
+def split_human_audio(model_name, paths, save_root_vocal, save_root_ins, agg, format0):
+    uvrGenerator = uvr(model_name, paths, save_root_vocal, paths, save_root_ins, agg, format0)
     for value in uvrGenerator:
         print(value)
 
@@ -130,6 +130,6 @@ save_root_ins = current_working_directory + "/" + "data_handle"
 agg = 10
 formate0 = "wav"
 split_human_audio(model_name=model_name,
-                  save_root_vocal=save_root_vocal, paths=paths, save_root_ins=save_root_ins, agg=agg, format0=formate0)
+                  paths=paths, save_root_vocal=save_root_vocal , save_root_ins=save_root_ins, agg=agg, format0=formate0)
 
 
