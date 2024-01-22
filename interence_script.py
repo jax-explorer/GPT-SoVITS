@@ -4,9 +4,11 @@ from pydub import AudioSegment
 import pysrt
 import sys
 import wave
-sys.path.append('/content/GPT-SoVITS')
-sys.path.append('/content/GPT-SoVITS/tools')
-sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
+current_working_directory = os.getcwd()
+
+sys.path.append(current_working_directory)
+sys.path.append(current_working_directory + '/tools')
+sys.path.append(current_working_directory + '/GPT_SoVITS')
 
 cnhubert_base_path = os.environ.get(
     "cnhubert_base_path", "GPT_SoVITS/pretrained_models/chinese-hubert-base"

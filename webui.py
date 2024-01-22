@@ -1,9 +1,12 @@
 import json,yaml,warnings,torch
 import platform
 import sys
-sys.path.append('/content/GPT-SoVITS')
-sys.path.append('/content/GPT-SoVITS/tools')
-sys.path.append('/content/GPT-SoVITS/GPT_SoVITS')
+import os
+current_working_directory = os.getcwd()
+
+sys.path.append(current_working_directory)
+sys.path.append(current_working_directory + '/tools')
+sys.path.append(current_working_directory + '/GPT_SoVITS')
 
 warnings.filterwarnings("ignore")
 torch.manual_seed(233333)
