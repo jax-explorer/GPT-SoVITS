@@ -256,7 +256,7 @@ def create_wav_file(file_path, audio_data, sampling_rate):
 def interence(srt_content, audio_list_dir):
     subs = pysrt.from_string(srt_content)
     for i, sub in enumerate(subs):
-        wav_name = (i+1) + ".wav"
+        wav_name = f"{i+1}.wav"
         ref_wav_path = audio_list_dir + "/" + wav_name
         chinese_text = sub.text.split('\n')[1]
         english_text = sub.text.split('\n')[0]

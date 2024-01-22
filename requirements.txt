@@ -20,3 +20,5 @@ pydub
 pysrt
 google-cloud-storage
 ffmpeg
+jieba
+transformers
