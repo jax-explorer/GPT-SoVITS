@@ -16,8 +16,9 @@ def train_SoVITS(batch_size,total_epoch,exp_name,text_low_lr_rate,if_save_latest
         print(value)
 
 
-def train_GPT(batch_size,total_epoch,exp_name,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1):
-    open1BbGenerator = open1Bb(batch_size,total_epoch,exp_name,if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1)
+def train_GPT(batch_size,total_epoch,exp_name,if_dpo, if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1):
+    open1BbGenerator = open1Bb(batch_size, total_epoch, exp_name, if_dpo, if_save_latest,if_save_every_weights,save_every_epoch,gpu_numbers,pretrained_s1)
+
     for value in open1BbGenerator:
         print(value)
 current_working_directory = os.getcwd()
@@ -59,10 +60,10 @@ gpt_if_save_every_weights = True
 gpt_save_every_epoch = 5
 gpu_numbers1Bb = "%s" % (gpus)
 pretrained_s1 = "GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt"
+if_dpo = False
 
 
-
-train_GPT(batch_size=gpt_batch_size, total_epoch=gpt_total_epoch, exp_name=exp_name, if_save_latest=gpt_if_save_latest,
+train_GPT(batch_size=gpt_batch_size, total_epoch=gpt_total_epoch, exp_name=exp_name, if_dpo=if_dpo, if_save_latest=gpt_if_save_latest,
           if_save_every_weights=gpt_if_save_every_weights, save_every_epoch=gpt_save_every_epoch, 
           gpu_numbers=gpu_numbers1Bb, pretrained_s1=pretrained_s1
            )
