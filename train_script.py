@@ -33,7 +33,7 @@ batch_size = default_batch_size
 total_epoch = 8
 text_low_lr_rate = 0.4
 if_save_latest = True
-if_save_every_weights = True
+if_save_every_weights = False
 save_every_epoch = 4
 gpu_numbers1Ba = "%s" % (gpus)
 pretrained_s2D = "GPT_SoVITS/pretrained_models/s2D488k.pth"
@@ -47,7 +47,7 @@ def train_SoVITS(batch_size=batch_size,total_epoch=total_epoch,exp_name=exp_name
 gpt_batch_size = default_batch_size
 gpt_total_epoch = 15
 gpt_if_save_latest = True
-gpt_if_save_every_weights = True
+gpt_if_save_every_weights = False
 gpt_save_every_epoch = 5
 gpu_numbers1Bb = "%s" % (gpus)
 pretrained_s1 = "GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt"

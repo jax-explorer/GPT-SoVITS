@@ -1,4 +1,4 @@
-from interence_base import get_tts_wav, change_sovits_weights, change_gpt_weights
+from inference_base import get_tts_wav, change_sovits_weights, change_gpt_weights
 import wave
 import numpy as np
 
@@ -16,6 +16,6 @@ def create_wav_file(file_path, audio_data, sampling_rate):
 def interence(ref_wav_path, prompt_text, prompt_language, text, text_language, result_path, sovits_path, gpt_path):
     change_sovits_weights(sovits_path)
     change_gpt_weights(gpt_path)
-    getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language)
+    getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language, "Slice once every 4 sentences")
     for simple_rate, audio_data in getTTSWavGenerator:
         create_wav_file(file_path=result_path, audio_data=audio_data, sampling_rate=simple_rate)
