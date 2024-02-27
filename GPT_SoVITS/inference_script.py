@@ -19,6 +19,10 @@ def create_wav_file(file_path, audio_data, sampling_rate):
 def inference(ref_wav_path, prompt_text, prompt_language, text, text_language, result_path, sovits_path, gpt_path):
     change_sovits_weights(sovits_path)
     change_gpt_weights(gpt_path)
-    getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language, "Slice once every 4 sentences", top_k=5, top_p=1, temperature=1)
+    if text_language == "English":
+        split_method = "Slice by English punct"
+    else:
+        split_method = "Slice once every 4 sentences"
+    getTTSWavGenerator = get_tts_wav(ref_wav_path, prompt_text, prompt_language, text, text_language, split_method, top_k=5, top_p=1, temperature=1)
     for simple_rate, audio_data in getTTSWavGenerator:
         create_wav_file(file_path=result_path, audio_data=audio_data, sampling_rate=simple_rate)
